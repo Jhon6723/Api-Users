@@ -82,7 +82,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 } 
-
+builder.WebHost.UseUrls("http://0.0.0.0:5052");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
