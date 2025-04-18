@@ -1,9 +1,9 @@
 using ChatApp.API.DTOs;
 using ChatApp.API.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatApp.API.Controllers;
-
 [ApiController]
 [Route("api/[controller]")]
 public class RoomController : ControllerBase
@@ -15,6 +15,7 @@ public class RoomController : ControllerBase
         _roomService = roomService;
     }
 
+    [Authorize]
     [HttpPost("create")]
     public async Task<IActionResult> CreateRoom([FromBody] RoomDto dto)
     {
@@ -25,6 +26,7 @@ public class RoomController : ControllerBase
         return Ok(new { message = "Sala creada exitosamente." });
     }
 
+    [Authorize]
     [HttpPost("join")]
     public async Task<IActionResult> JoinRoom([FromBody] RoomDto dto)
     {
@@ -36,7 +38,8 @@ public class RoomController : ControllerBase
 
         return Ok(new { message = $"Unido a la sala '{dto.RoomName}'." });
     }
-
+    
+    [Authorize]
     [HttpGet("all")]
     public async Task<IActionResult> GetAllRooms()
     {
