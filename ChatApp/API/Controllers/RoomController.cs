@@ -38,7 +38,7 @@ public class RoomController : ControllerBase
 
         return Ok(new { message = $"Unido a la sala '{dto.RoomName}'." });
     }
-    
+
     [Authorize]
     [HttpGet("all")]
     public async Task<IActionResult> GetAllRooms()
@@ -46,4 +46,16 @@ public class RoomController : ControllerBase
         var rooms = await _roomService.GetAllRoomsAsync();
         return Ok(rooms);
     }
+
+    [Authorize]
+    [HttpGet("{name}")]
+    public async Task<IActionResult> GetRoomByName([FromRoute] string name)
+    {
+        var room = await _roomService.GetRoomByNameAsync(name);
+        if (room == null)
+            return NotFound(new { message = "Sala no encontrada" });
+
+        return Ok(new { room });
+    }
+
 }

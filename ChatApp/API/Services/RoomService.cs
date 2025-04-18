@@ -40,4 +40,10 @@ public class RoomService : IRoomService
             .Select(r => r.Name)
             .ToListAsync();
     }
+    public async Task<string?> GetRoomByNameAsync(string name)
+    {
+        var room = await _context.ChatRooms.FirstOrDefaultAsync(r => r.Name == name);
+        return room?.Name;
+    }
+
 }
