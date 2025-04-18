@@ -1,0 +1,5 @@
+ChatApp/Migrations/20250418030125_initialCreate.cs
+ChatApp/Migrations/20250418030125_initialCreate.Designer.cs
+ChatApp/Migrations/20250418031634_UpdateModel.cs
+ChatApp/Migrations/20250418031634_UpdateModel.Designer.cs
+ChatApp/Migrations/ChatAppDbContextModelSnapshot.cs

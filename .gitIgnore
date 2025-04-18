@@ -1,0 +1,41 @@
+# Build
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+
+# Logs
+*.log
+
+# OS junk files
+.DS_Store
+Thumbs.db
+
+# Entity Framework Migrations cache
+_Migrations/
+
+# JetBrains Rider
+.idea/
+
+# SQLite or local DB files (si usas SQLite en pruebas)
+*.db
+*.db-shm
+*.db-wal
+
+# Test results
+TestResults/
+*.TestResults/
+
+# Node modules (si tienes frontend en el mismo repo)
+node_modules/
+
+# Secrets (por si usas algún archivo local de configuración)
+appsettings.Development.json
+secrets.json
