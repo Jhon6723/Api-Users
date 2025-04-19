@@ -3,6 +3,8 @@ using MQTTnet;
 using MQTTnet.Client;
 using System.Text;
 
+string CONSTANT_URI = "http://192.168.0.102:5052";
+string CONSTANT_SERVER_IP = "192.168.0.102";
 Console.WriteLine("=== ChatApp CLI ===");
 
 string? username = null;
@@ -49,7 +51,7 @@ async Task RegisterUser()
     var password = Console.ReadLine();
 
     var http = new HttpClient();
-    var response = await http.PostAsJsonAsync("http://localhost:5052/auth/register", new
+    var response = await http.PostAsJsonAsync(CONSTANT_URI+"/auth/register", new
     {
         Username = username,
         Password = password
@@ -71,7 +73,7 @@ async Task<(string?, string?)> LoginUser()
     var password = Console.ReadLine();
 
     var http = new HttpClient();
-    var response = await http.PostAsJsonAsync("http://localhost:5052/auth/login", new
+    var response = await http.PostAsJsonAsync(CONSTANT_URI+"/auth/login", new
     {
         Username = username,
         Password = password
@@ -110,7 +112,7 @@ async Task RunMqttClient(string username, string jwt)
         switch (opt)
         {
             case "1":
-                var rooms = await http.GetFromJsonAsync<List<string>>("http://localhost:5052/api/room/all");
+                var rooms = await http.GetFromJsonAsync<List<string>>(CONSTANT_URI+"/api/room/all");
                 Console.WriteLine("Salas disponibles:");
                 rooms?.ForEach(r => Console.WriteLine($" - {r}"));
                 break;
@@ -118,7 +120,7 @@ async Task RunMqttClient(string username, string jwt)
             case "2":
                 Console.Write("Nombre de la sala a unirse: ");
                 var salaUnirse = Console.ReadLine();
-                var resJoin = await http.PostAsJsonAsync("http://localhost:5052/api/room/join", new { roomName = salaUnirse });
+                var resJoin = await http.PostAsJsonAsync(CONSTANT_URI+"/api/room/join", new { roomName = salaUnirse });
 
                 if (resJoin.IsSuccessStatusCode)
                 {
@@ -135,7 +137,7 @@ async Task RunMqttClient(string username, string jwt)
             case "3":
                 Console.Write("Nombre de la nueva sala: ");
                 var salaCrear = Console.ReadLine();
-                var resCrear = await http.PostAsJsonAsync("http://localhost:5052/api/room/create", new { roomName = salaCrear });
+                var resCrear = await http.PostAsJsonAsync(CONSTANT_URI+"/api/room/create", new { roomName = salaCrear });
 
                 Console.WriteLine(resCrear.IsSuccessStatusCode ? "Sala creada ✅" : "Error: la sala ya existe ❌");
                 break;
@@ -159,7 +161,7 @@ async Task IniciarChatMqtt(string username, string jwt, string topic)
     var client = factory.CreateMqttClient();
 
     var options = new MqttClientOptionsBuilder()
-        .WithTcpServer("localhost", 1883)
+        .WithTcpServer(CONSTANT_SERVER_IP, 1883)
         .WithCredentials(username, jwt)
         .WithClientId(Guid.NewGuid().ToString())
         .Build();

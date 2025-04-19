@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ChatApp.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("auth")]
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
@@ -35,14 +35,24 @@ public class AuthController : ControllerBase
         return Ok(new { token });
     }
 
-    // Endpoint usado por Mosquitto para validar JWT
-    [HttpPost("auth")]
-    public IActionResult MqttAuth([FromBody] MqttAuthDto dto)
-    {
-        var isValid = _authService.ValidateToken(dto.Password);
-        if (!isValid)
-            return Unauthorized(new { result = "deny" });
+    // === ENDPOINTS USADOS POR MOSQUITTO-GO-AUTH (modo jwt/remote) ===
 
-        return Ok(new { result = "ok" });
+    [HttpPost]
+    public IActionResult Auth([FromForm] string username, [FromForm] string password)
+    {
+        var isValid = _authService.ValidateToken(password);
+        return isValid ? Ok() : Unauthorized();
+    }
+
+    [HttpPost("superuser")]
+    public IActionResult Superuser([FromForm] string username)
+    {
+        return Ok("deny"); // Ningún usuario es superuser (por ahora)
+    }
+
+    [HttpPost("acl")]
+    public IActionResult Acl([FromForm] string username, [FromForm] string topic, [FromForm] string acc)
+    {
+        return Ok("ok"); // Permite acceso a todos los topics por ahora
     }
 }
