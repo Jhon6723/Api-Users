@@ -26,7 +26,7 @@ public class AuthService : IAuthService
 
     public async Task<bool> RegisterAsync(RegisterDto dto)
     {
-        var exists = await _context.Users.AnyAsync(u => u.Username == dto.Username);
+        var exists = await _context.Users.AnyAsync(u => u.Username == dto.Username.ToLower());
         if (exists) return false; // Devuelve falso si ya existe este usuario
 
         var user = new User // Crea la entidad del usuario
@@ -45,8 +45,15 @@ public class AuthService : IAuthService
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == dto.Username);
         if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
             return null;
+        string tokenUser = GenerateJwt(user);
 
-        return GenerateJwt(user);
+        return ValidateToken(tokenUser) ? tokenUser : "Token no valido";
+    }
+    public async Task<bool> ValidateMosquitto(string username, string pwd){
+        var userPwd = await _context.Users.FirstOrDefaultAsync(e => username == e.Username);
+        if (userPwd == null || !BCrypt.Net.BCrypt.Verify(pwd, userPwd.PasswordHash))
+            return false;
+        return true;
     }
 
     public bool ValidateToken(string token)
@@ -94,4 +101,5 @@ public class AuthService : IAuthService
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+    
 }
