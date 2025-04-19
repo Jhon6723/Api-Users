@@ -39,3 +39,4 @@ node_modules/
 # Secrets (por si usas algún archivo local de configuración)
 appsettings.Development.json
 secrets.json
+

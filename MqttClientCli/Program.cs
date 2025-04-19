@@ -3,8 +3,8 @@ using MQTTnet;
 using MQTTnet.Client;
 using System.Text;
 
-string CONSTANT_URI = "http://192.168.0.100:5052";
-string CONSTANT_SERVER_IP = "192.168.0.100";
+string CONSTANT_URI = "https://chatapp-api-jhon.azurewebsites.net";
+string CONSTANT_SERVER_IP = "172.191.191.103";
 Console.WriteLine("=== ChatApp CLI ===");
 
 string? username = null;
