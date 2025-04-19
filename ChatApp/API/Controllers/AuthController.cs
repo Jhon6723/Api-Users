@@ -38,11 +38,19 @@ public class AuthController : ControllerBase
     // === ENDPOINTS USADOS POR MOSQUITTO-GO-AUTH (modo jwt/remote) ===
 
     [HttpPost]
-    public IActionResult Auth([FromForm] string username, [FromForm] string password)
+    public IActionResult Auth(
+        [FromForm] string? username,
+        [FromForm] string? password,
+        [FromBody] JwtAuthRequest? body)
     {
-        var isValid = _authService.ValidateToken(password);
+        var token = password ?? body?.Password;
+        if (string.IsNullOrEmpty(token))
+            return BadRequest();
+
+        var isValid = _authService.ValidateToken(token);
         return isValid ? Ok() : Unauthorized();
     }
+
 
     [HttpPost("superuser")]
     public IActionResult Superuser([FromForm] string username)
