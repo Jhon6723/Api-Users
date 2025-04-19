@@ -89,7 +89,6 @@ async Task<(string?, string?)> LoginUser()
     var json = await response.Content.ReadFromJsonAsync<Dictionary<string, string>>();
     Console.WriteLine("Inicio de sesión exitoso.");
     Console.WriteLine($"Username: {username}");
-    Console.WriteLine($"Token JWT: {json["token"]}");
     Console.WriteLine("Presiona cualquier tecla para conectarte al chat...");
     Console.ReadKey();
     return (username, json["token"]);
