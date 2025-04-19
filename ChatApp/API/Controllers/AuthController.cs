@@ -38,14 +38,16 @@ public class AuthController : ControllerBase
     // === ENDPOINTS USADOS POR MOSQUITTO-GO-AUTH (modo jwt/remote) ===
 
     [HttpPost]
-    public async Task<IActionResult> Auth(
-        [FromForm] string username,
-        [FromForm] string? password)
+    public IActionResult Auth()
     {
-        if (string.IsNullOrEmpty(password))
-            return BadRequest();
+        var authHeader = Request.Headers["Authorization"].ToString();
 
-        var isValid = await _authService.ValidateMosquitto(username, password);
+        if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+            return BadRequest("Authorization header missing or malformed");
+
+        var token = authHeader.Replace("Bearer ", "");
+
+        var isValid = _authService.ValidateToken(token);
         return isValid ? Ok() : Unauthorized();
     }
 

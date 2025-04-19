@@ -128,7 +128,7 @@ async Task RunMqttClient(string username, string jwt)
                 {
                     Console.WriteLine($"Unido a la sala '{salaUnirse}'");
                     Console.WriteLine("Conectando a MQTT...");
-                    await IniciarChatMqtt(username, jwt, salaUnirse!);
+                    await IniciarChatMqtt(jwt, salaUnirse!);
                 }
                 else
                 {
@@ -157,14 +157,14 @@ async Task RunMqttClient(string username, string jwt)
     }
 }
 
-async Task IniciarChatMqtt(string username, string jwt, string topic)
+async Task IniciarChatMqtt(string jwt, string topic)
 {
     var factory = new MqttFactory();
     var client = factory.CreateMqttClient();
 
     var options = new MqttClientOptionsBuilder()
         .WithTcpServer(CONSTANT_SERVER_IP, 1883)
-        .WithCredentials(username, jwt)
+        .WithCredentials(jwt, "-")
         .WithClientId(Guid.NewGuid().ToString())
         .Build();
 
